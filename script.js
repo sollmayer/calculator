@@ -59,15 +59,16 @@ function handleDecimalBtnClick() {
     if(!isNaN(prevChar) && !decimalSelected){ 
         populateScreen('.');
         decimalSelected = true;
-        if(operator === null) parseFloat(firstNumber += '.')
-        else if (operator !== null) parseFloat(secondNumber += '.')
+        if(operator === null) parseFloat(firstNumber += '.');
+        else if (operator !== null) parseFloat(secondNumber += '.');
     }
     console.log(prevChar)
 }
 
 function handleDeleteBtnClick() {
-    const prevCharacter = screen.textContent.slice(0,-1);
-    screen.textContent = prevCharacter;
+    const deletedItem = screen.textContent.slice(screen.textContent.length - 1)
+    if(deletedItem === '.') decimalSelected = false;
+    screen.textContent = screen.textContent.slice(0,-1);
     if(operator === null && secondNumber === '') {
         firstNumber = screen.textContent;
     }else if(operator !== null && secondNumber === '') {
