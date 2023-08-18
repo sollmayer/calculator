@@ -8,15 +8,7 @@ let firstNumber = '';
 let secondNumber = '';
 let decimalSelected = false;
 
-function operate(operator, firstNumber, secondNumber) {
-    if(operator === "+") return add(firstNumber, secondNumber);
-    else if(operator === "-") return subtract(firstNumber, secondNumber);
-    else if(operator === "*") return multiply(firstNumber, secondNumber);
-    else if(operator === "/") return divide(firstNumber, secondNumber);
-}
-
 const screen = document.querySelector('.screen p');
-
 const numbers = document.querySelectorAll(".digit");
 const operation = document.querySelectorAll(".operation");
 const clearBtn = document.querySelector('.clearBtn');
@@ -24,29 +16,50 @@ const resultBtn = document.querySelector('.resultBtn');
 const decimalBtn = document.querySelector('.decimal');
 const deleteBtn = document.querySelector('.deleteBtn');
 
-numbers.forEach(number => number.addEventListener('click', ()=>handleNumberClick(number.textContent)));
+numbers.forEach(number => number.addEventListener('mousedown', ()=>{
+    number.classList.add('clicked');
+    handleNumberClick(number.textContent);
+}));
+numbers.forEach(number => number.addEventListener('mouseup', ()=> {number.classList.remove('clicked')}))
+numbers.forEach(number => number.addEventListener('mouseout', ()=> {number.classList.remove('clicked')}))
 operation.forEach(operator => operator.addEventListener('click', ()=>setOperation(operator.textContent)));
 clearBtn.addEventListener('click',  clearScreen);
 resultBtn.addEventListener('click', handleResultBtnClick);
 decimalBtn.addEventListener('click', handleDecimalBtnClick);
 deleteBtn.addEventListener('click', handleDeleteBtnClick);
 
-
 function populateScreen(item){
+    if(screen.clientWidth > screen.parentElement.clientWidth - 30){
+        screen.textContent = screen.textContent.slice(1);
+    }
     screen.textContent += item
 }
-
+function operate(operator, firstNumber, secondNumber) {
+    if(operator === "+") return add(firstNumber, secondNumber);
+    else if(operator === "-") return subtract(firstNumber, secondNumber);
+    else if(operator === "*") return multiply(firstNumber, secondNumber);
+    else if(operator === "/") {
+        if(secondNumber == 0) {
+            alert("You can't divide by zero")
+            return '';
+        }
+        else return divide(firstNumber, secondNumber)
+    };
+}
 function handleNumberClick(number){
+    let operatorIndex = screen.textContent.split('').findIndex(item => item === operator);
+    if((operator === null && screen.textContent == '0') 
+        || (screen.textContent.slice(operatorIndex + 1) == '0')) return; 
+    
     if(operator !== null) {secondNumber += number}
     else firstNumber += number;
-    console.log('firstNumber', firstNumber);
-    console.log('secondNumber', secondNumber);
+
     populateScreen(number);
 }
 
 function handleResultBtnClick(){
     if(firstNumber !== '' && secondNumber !== ''){
-        const result = operate(operator, firstNumber, secondNumber);
+        const result = Math.round(operate(operator, firstNumber, secondNumber) * 10000)/10000;
         clearScreen()
         populateScreen(result)
         firstNumber = screen.textContent;
@@ -62,7 +75,6 @@ function handleDecimalBtnClick() {
         if(operator === null) parseFloat(firstNumber += '.');
         else if (operator !== null) parseFloat(secondNumber += '.');
     }
-    console.log(prevChar)
 }
 
 function handleDeleteBtnClick() {
@@ -87,7 +99,6 @@ function setOperation(operation) {
         operator === null ? populateScreen(operation) : screen.textContent = screen.textContent.slice(0,-1) + operation;
         operator = operation;
         decimalSelected = false;
-        console.log(operator);
     }
     
 }
