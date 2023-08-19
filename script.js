@@ -28,6 +28,14 @@ resultBtn.addEventListener('click', handleResultBtnClick);
 decimalBtn.addEventListener('click', handleDecimalBtnClick);
 deleteBtn.addEventListener('click', handleDeleteBtnClick);
 
+window.addEventListener('keydown', (e)=>{
+    if(!isNaN(e.key)) handleNumberClick(e.key)
+    if(e.key == '.') handleDecimalBtnClick()
+    if(e.key == 'Backspace') handleDeleteBtnClick()
+    if(e.key == 'Enter') handleResultBtnClick()
+    else if(e.key.match(/[\+\-\*\/]/)) setOperation(e.key);
+})
+
 function populateScreen(item){
     if(screen.clientWidth > screen.parentElement.clientWidth - 30){
         screen.textContent = screen.textContent.slice(1);
