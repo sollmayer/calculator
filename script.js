@@ -37,9 +37,6 @@ window.addEventListener('keydown', (e)=>{
 })
 
 function populateScreen(item){
-    if(screen.clientWidth > screen.parentElement.clientWidth - 30){
-        screen.textContent = screen.textContent.slice(1);
-    }
     screen.textContent += item
 }
 function operate(operator, firstNumber, secondNumber) {
