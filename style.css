@@ -44,7 +44,9 @@ button:hover {
     border: 2px solid rgb(42, 42, 42);
     border-radius: 10px;
     font-size: 26px;
-    /* box-shadow: 0px 5px rgb(57, 57, 57); */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .screen p {
     margin-right: 10px;
